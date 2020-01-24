@@ -1,7 +1,5 @@
 package rien.bijl.Scoreboard.r.board;
 
-import org.bukkit.ChatColor;
-import rien.bijl.Scoreboard.r.Main;
 import rien.bijl.Scoreboard.r.util.Func;
 
 import java.util.ArrayList;

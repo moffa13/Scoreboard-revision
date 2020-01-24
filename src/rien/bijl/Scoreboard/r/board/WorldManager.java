@@ -5,9 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import rien.bijl.Scoreboard.r.Session;
 import rien.bijl.Scoreboard.r.util.ConfigControl;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class WorldManager extends BukkitRunnable {
 

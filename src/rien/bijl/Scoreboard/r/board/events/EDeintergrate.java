@@ -2,11 +2,9 @@ package rien.bijl.Scoreboard.r.board.events;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import rien.bijl.Scoreboard.r.Main;
 import rien.bijl.Scoreboard.r.board.App;
-import rien.bijl.Scoreboard.r.board.ScoreboardHolder;
 
 /**
  * Created by Rien on 23-10-2018.

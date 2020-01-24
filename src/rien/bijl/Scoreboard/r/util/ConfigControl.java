@@ -3,7 +3,6 @@ package rien.bijl.Scoreboard.r.util;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import rien.bijl.Scoreboard.r.Main;
 import rien.bijl.Scoreboard.r.Session;
 
 import java.io.*;

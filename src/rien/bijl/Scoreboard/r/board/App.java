@@ -3,7 +3,6 @@ package rien.bijl.Scoreboard.r.board;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import rien.bijl.Scoreboard.r.Main;
 import rien.bijl.Scoreboard.r.Session;
 import rien.bijl.Scoreboard.r.board.events.EDeintergrate;
 import rien.bijl.Scoreboard.r.board.events.EIntergrate;
@@ -19,7 +18,6 @@ public class App extends BukkitRunnable {
 
     private Row title;
     private ArrayList<Row> rows = new ArrayList<>();
-    private ArrayList<Player> children = new ArrayList<>();
     public ArrayList<ScoreboardHolder> holders = new ArrayList<>();
     public static boolean longline = false;
     public String board;

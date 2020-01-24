@@ -6,10 +6,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.*;
-import rien.bijl.Scoreboard.r.Main;
+import org.bukkit.scoreboard.Scoreboard;
 import rien.bijl.Scoreboard.r.Session;
 import rien.bijl.Scoreboard.r.board.App;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,10 +18,8 @@ import java.util.HashMap;
 public class Slimboard {
 
     private Player player;
-    private Plugin plugin;
     public Scoreboard board;
     private Objective objective;
-    private int linecount;
 
     private HashMap<Integer, String> cache = new HashMap<>();
 
@@ -35,25 +32,48 @@ public class Slimboard {
     public Slimboard(Plugin plugin, Player player, int linecount)
     {
         this.player = player;
-        this.plugin = plugin;
-        this.linecount = linecount;
-        this.board = this.plugin.getServer().getScoreboardManager().getNewScoreboard();
-        this.objective = this.board.registerNewObjective("sb1", "sb2");
-        this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        this.objective.setDisplayName("...");
-
+        this.board = Bukkit.getServer().getScoreboardManager().getMainScoreboard(); // use the main scoreboard
+        
+        String objectiveName = "sb-plugin";
+        Objective objPresent = null;
+        for(Objective o : this.board.getObjectives()) {
+        	if(o.getName().equals(objectiveName)) {
+        		objPresent = o;
+        		break;
+        	}
+        }
+        
+        if(objPresent == null) {
+        	 this.objective = this.board.registerNewObjective("sb-plugin", "dummy", "...");
+        	 this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }else {
+        	this.objective = objPresent;
+        }
+        
+        for(Team t : this.board.getTeams()) { // Remove teams we don't need
+        	if(t.getName().startsWith("sb_")) {
+        		t.unregister();
+        	}
+        	
+        }
+        
         int score = linecount;
         for(int i = 0; i < linecount;i++) // Loop through the lines
         {
-            Team t = this.board.registerNewTeam(i + ""); // Create the first team
-            t.addEntry(ChatColor.values()[i] + ""); // Assign the team with a color
+        	String teamName = "sb_" + i;
+        	if(this.board.getTeam(teamName) == null) {
+        		Team t = this.board.registerNewTeam(teamName); // Create the first team
+                t.addEntry(ChatColor.values()[i] + ""); // Assign the team with a color
 
-            this.objective.getScore(ChatColor.values()[i] + "").setScore(score); // Set the socre number
+                this.objective.getScore(ChatColor.values()[i] + "").setScore(score); // Set the socre number
 
+        	}
+            
             score--; // Lower the score number for the next line
         }
-
-        this.player.setScoreboard(this.board); // Set the board to the player
+        
+        this.player.setScoreboard( this.board);
+       
     }
 
     /**
@@ -82,7 +102,7 @@ public class Slimboard {
      */
     public void setLine(int line, String string)
     {
-        Team t = board.getTeam((line) + ""); // Get the team we use
+        Team t = board.getTeam("sb_" + line); // Get the team we use
         if(string == null) string = ""; // Line null? No problem, make it empty!
 
         if(cache.containsKey(line) && cache.get(line) == string) return; // The line hasn't updated?
@@ -121,7 +141,7 @@ public class Slimboard {
     {
         ArrayList<String> parts = null;
         if(App.longline) parts = convertIntoPieces(color, 64); else parts = convertIntoPieces(color, 15);
-            return parts.get(0) + "Â§f" +  getLastColor(parts.get(0)) + parts.get(1);
+            return parts.get(0) + "§f" +  getLastColor(parts.get(0)) + parts.get(1);
     }
 
     private String prepForShortline(String color)
@@ -129,7 +149,7 @@ public class Slimboard {
         if(color.length() > 16)
         {
             ArrayList<String> pieces = convertIntoPieces(color, 16);
-            return pieces.get(0) + "Â§f"  + getLastColor(pieces.get(0)) + pieces.get(1);
+            return pieces.get(0) + "§f"  + getLastColor(pieces.get(0)) + pieces.get(1);
         }
         return color;
     }
@@ -161,47 +181,4 @@ public class Slimboard {
 
         return parts;
     }
-
-//    private ArrayList<String> getPartsForShortline(String s)
-//    {
-//
-//        ArrayList<String> parts = new ArrayList<>();
-//
-//        if(ChatColor.stripColor(s).length() > 16)
-//        {
-//            parts.add(s.substring(0, 16));
-//
-//            String s2 = s.substring(16, s.length());
-//            if(s2.length() > 16)
-//                s2 = s2.substring(0, 16);
-//            parts.add(s2);
-//        } else {
-//            parts.add(s);
-//            parts.add("");
-//        }
-//
-//        return parts;
-//    }
-//    private ArrayList<String> getPartsForLongline(String s)
-//    {
-//
-//        ArrayList<String> parts = new ArrayList<>();
-//
-//        if(ChatColor.stripColor(s).length() > 64)
-//        {
-//            parts.add(s.substring(0, 64));
-//
-//            String s2 = s.substring(64, s.length());
-//            if(s2.length() > 64)
-//                s2 = s2.substring(0, 64);
-//            parts.add(s2);
-//        } else {
-//            parts.add(s);
-//            parts.add("");
-//        }
-//
-//        return parts;
-//
-//    }
-
 }
