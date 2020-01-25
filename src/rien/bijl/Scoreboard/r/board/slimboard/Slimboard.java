@@ -52,7 +52,11 @@ public class Slimboard {
         
         for(Team t : this.board.getTeams()) { // Remove teams we don't need
         	if(t.getName().startsWith("sb_")) {
-        		t.unregister();
+        		int i = Integer.parseInt(t.getName().split("sb_")[1]);
+        		if(i >= linecount) {
+        			t.unregister();
+        			this.board.resetScores(ChatColor.values()[i] + "");
+        		}
         	}
         	
         }
@@ -72,7 +76,7 @@ public class Slimboard {
             score--; // Lower the score number for the next line
         }
         
-        this.player.setScoreboard( this.board);
+        this.player.setScoreboard(this.board);
        
     }
 
